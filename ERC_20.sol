@@ -18,12 +18,10 @@ contract Block is IERC20{
 
   string public name="Block"; //name of the token
   string public symbol="BLK"; //symbol of the token
-  uint public decimal=0; //we will talk about this at the end 
-  address public founder;//initially this will have the total supply
+  uint public decimal=0; 
+  address public founder;
   mapping(address=>uint) public balances; //information of balance of each address
   uint public totalSupply;
-  //0x123 - 10000
-  //0x456 - 2000
 
   mapping(address=>mapping(address=>uint)) allowed;
   
@@ -34,6 +32,7 @@ contract Block is IERC20{
   }
   
   //balance of token of an account
+
   function balanceOf(address account) external view returns (uint256){
      return balances[account];
   }
@@ -45,13 +44,11 @@ contract Block is IERC20{
      emit Transfer(msg.sender, recipient, amount);
      return true;
   }
-  //spender = 0xabc owner= 0xdef   10Tokens //passbook - kisne kisko kitna diya
+  
   function allowance(address owner, address spender) external view returns (uint256){
         return allowed[owner][spender];
   } 
-  //msg.sender ne spender ko amount diya
-  //this is like signing check
-  //10:am - 100 tokens
+
   function approve(address spender, uint256 amount) external returns (bool){
         require(amount>0,"amount must be greater than zero");
         require(balances[msg.sender]>=amount,"Balance must be greater than zero");
@@ -59,9 +56,6 @@ contract Block is IERC20{
         emit Approval(msg.sender, spender, amount);
         return true;
   }
-  //in order to cash out the check
-  //12:00pm
-
   function transferFrom(address sender, address recipient, uint256 amount) external returns (bool){
      require(allowed[sender][recipient]>=amount,"Recipient don't have authority to spend sender's token");
      require(balances[sender]>=amount,"Insufficient balance");
